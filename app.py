@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask.helpers import send_file
 import logging
+from PIL import Image
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -17,38 +19,74 @@ from box_utils import (
 import base64
 import io
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="/", static_folder="web")
 CORS(app)
 
 face_detector_onnx = "version-RFB-640.onnx"
 face_detector = ort.InferenceSession(face_detector_onnx)
 
 
+def base64_to_image(base64_data):
+    try:
+        img_data = base64.b64decode(base64_data)
+        img = Image.open(io.BytesIO(img_data))
+        return img
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+
+def image_to_base64(image):
+    buffered = io.BytesIO()
+    image.save(buffered, format="JPEG")
+    img_byte_data = buffered.getvalue()
+    return base64.b64encode(img_byte_data).decode("ascii")
+
+
+def process_image(image):
+    face_cascade = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
+
+    image_np = np.array(image)
+    gray = cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY)
+
+    faces = face_cascade.detectMultiScale(
+        gray,
+        scaleFactor=1.1,
+        minNeighbors=5,
+        minSize=(30, 30),
+        flags=cv2.CASCADE_SCALE_IMAGE,
+    )
+
+    for x, y, w, h in faces:
+        cv2.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+    return Image.fromarray(image_np)
+
+
 @app.route("/", methods=["GET"])
 def index():
-    return "Hello World"
+    return send_file("web/index.html")
 
 
 @app.route("/detect_faces", methods=["POST"])
 def detect_faces():
-    if "image" not in request.files:
-        return jsonify({"error": "No image file in the request"}), 400
+    data = request.get_json()
 
-    image_file = request.files["image"]
+    if "image" not in data:
+        return jsonify({"error": "Missing image data"}), 400
 
-    if image_file.filename == "":
-        return jsonify({"error": "No image file provided"}), 400
+    image_data = data["image"]
+    image = base64_to_image(image_data)
 
-    if not allowed_image_file(image_file.filename):
-        return jsonify({"error": "Invalid image file type"}), 400
+    if image is None:
+        return jsonify({"error": "Invalid image data"}), 400
 
-    image = read_image_from_file(image_file)
-    boxes, labels, probs = faceDetector(image)
+    # Process the image and detect faces
+    detected_image = process_image(image)
 
-    results = []
+    # Convert the processed image back to base64
+    output_image_data = image_to_base64(detected_image)
 
-    for i in range(boxes.shape[0]):
-        box = scale(boxes[i, :])
-        box = [int(x) for x in box]  # Convert box coordinates to int
-        results.append({"box": box})
-    return jsonify(results)
+    return jsonify({"image": output_image_data})
