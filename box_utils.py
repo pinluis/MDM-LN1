@@ -80,12 +80,13 @@ def predict(
         picked_box_probs.append(box_probs)
         picked_labels.extend([class_index] * box_probs.shape[0])
     if not picked_box_probs:
-        return np.array([]), np.array([]), np.array([])
+        return None, None, None
     picked_box_probs = np.concatenate(picked_box_probs)
     picked_box_probs[:, 0] *= width
     picked_box_probs[:, 1] *= height
     picked_box_probs[:, 2] *= width
     picked_box_probs[:, 3] *= height
+    print(picked_box_probs)  # add this line to print the picked boxes
     return (
         picked_box_probs[:, :4].astype(np.int32),
         np.array(picked_labels),
@@ -93,18 +94,7 @@ def predict(
     )
 
 
-def scale(box):
-    width = box[2] - box[0]
-    height = box[3] - box[1]
-    maximum = max(width, height)
-    dx = int((maximum - width) / 2)
-    dy = int((maximum - height) / 2)
-
-    bboxes = [box[0] - dx, box[1] - dy, box[2] + dx, box[3] + dy]
-    return bboxes
-
-
-def faceDetector(orig_image, threshold=0.7):
+def faceDetector(orig_image, threshold=0.5):
     image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(
         image, (640, 480)
@@ -121,3 +111,14 @@ def faceDetector(orig_image, threshold=0.7):
         orig_image.shape[1], orig_image.shape[0], confidences, boxes, threshold
     )
     return boxes, labels, probs
+
+
+def scale(box):
+    width = box[2] - box[0]
+    height = box[3] - box[1]
+    maximum = max(width, height)
+    dx = int((maximum - width) / 2)
+    dy = int((maximum - height) / 2)
+
+    bboxes = [box[0] - dx, box[1] - dy, box[2] + dx, box[3] + dy]
+    return bboxes

@@ -11,7 +11,6 @@ import onnxruntime as ort
 import numpy as np
 from box_utils import (
     predict,
-    scale,
     faceDetector,
     allowed_image_file,
     read_image_from_file,
@@ -44,24 +43,11 @@ def image_to_base64(image):
 
 
 def process_image(image):
-    face_cascade = cv2.CascadeClassifier(
-        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-    )
-
     image_np = np.array(image)
-    gray = cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY)
-
-    faces = face_cascade.detectMultiScale(
-        gray,
-        scaleFactor=1.1,
-        minNeighbors=5,
-        minSize=(30, 30),
-        flags=cv2.CASCADE_SCALE_IMAGE,
-    )
-
-    for x, y, w, h in faces:
+    boxes, _, _ = faceDetector(image_np)
+    for box in boxes:
+        x, y, w, h = box
         cv2.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 2)
-
     return Image.fromarray(image_np)
 
 
@@ -84,6 +70,9 @@ def detect_faces():
         return jsonify({"error": "Invalid image data"}), 400
 
     # Process the image and detect faces
+    boxes, _, _ = faceDetector(np.array(image))
+    print(f"Boxes detected: {boxes}")
+
     detected_image = process_image(image)
 
     # Convert the processed image back to base64
