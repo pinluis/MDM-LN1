@@ -126,7 +126,7 @@ dmypy.json
 
 # logs from python SDK
 *.log
-*.txt
+
 
 # Pypi credentials
 .pypirc
