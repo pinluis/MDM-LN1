@@ -87,9 +87,9 @@ cycler==0.11.0 ; python_full_version == "3.9.16" \
 filelock==3.10.0 ; python_full_version == "3.9.16" \
     --hash=sha256:3199fd0d3faea8b911be52b663dfccceb84c95949dd13179aa21436d1a79c4ce \
     --hash=sha256:e90b34656470756edf8b19656785c5fea73afa1953f3e1b0d645cef11cab3182
-flask-cors==3.0.10 ; python_full_version == "3.9.16" \
-    --hash=sha256:74efc975af1194fc7891ff5cd85b0f7478be4f7f59fe158102e91abb72bb4438 \
-    --hash=sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de
+# flask-cors==3.0.10 ; python_full_version == "3.9.16" \
+#     --hash=sha256:74efc975af1194fc7891ff5cd85b0f7478be4f7f59fe158102e91abb72bb4438 \
+#     --hash=sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de
 flask==2.2.3 ; python_full_version == "3.9.16" \
     --hash=sha256:7eb373984bf1c770023fce9db164ed0c3353cd0b53f130f4693da0ca756a2e6d \
     --hash=sha256:c0bec9477df1cb867e5a67c9e1ab758de9cb4a3e52dd70681f59fa40a62b3f2d
