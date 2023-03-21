@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 import onnxruntime as ort
-from PIL import Image
 
 
 face_detector_onnx = "version-RFB-640.onnx"
