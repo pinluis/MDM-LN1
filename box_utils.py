@@ -1,24 +1,11 @@
 import numpy as np
 import cv2
 import onnxruntime as ort
-
-import os
 from PIL import Image
-import io
+
 
 face_detector_onnx = "version-RFB-640.onnx"
 face_detector = ort.InferenceSession(face_detector_onnx)
-
-
-def allowed_image_file(filename):
-    ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def read_image_from_file(image_file):
-    img = Image.open(image_file)
-    img = np.array(img)
-    return img
 
 
 def area_of(left_top, right_bottom):
@@ -111,14 +98,3 @@ def faceDetector(orig_image, threshold=0.5):
         orig_image.shape[1], orig_image.shape[0], confidences, boxes, threshold
     )
     return boxes, labels, probs
-
-
-def scale(box):
-    width = box[2] - box[0]
-    height = box[3] - box[1]
-    maximum = max(width, height)
-    dx = int((maximum - width) / 2)
-    dy = int((maximum - height) / 2)
-
-    bboxes = [box[0] - dx, box[1] - dy, box[2] + dx, box[3] + dy]
-    return bboxes

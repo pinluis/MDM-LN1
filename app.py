@@ -1,23 +1,16 @@
 import logging
 from flask import Flask, request, jsonify
-
+import cv2
 from flask.helpers import send_file
-
+import onnxruntime as ort
+import numpy as np
+from box_utils import faceDetector
+import base64
+import io
 from PIL import Image
 
 logging.basicConfig(level=logging.DEBUG)
 
-import cv2
-import onnxruntime as ort
-import numpy as np
-from box_utils import (
-    predict,
-    faceDetector,
-    allowed_image_file,
-    read_image_from_file,
-)
-import base64
-import io
 
 app = Flask(__name__, static_url_path="/", static_folder="web")
 
