@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from flask.helpers import send_file
 import logging
+from flask import Flask, request, jsonify
+
+from flask.helpers import send_file
+
 from PIL import Image
 
 logging.basicConfig(level=logging.DEBUG)
@@ -19,7 +20,7 @@ import base64
 import io
 
 app = Flask(__name__, static_url_path="/", static_folder="web")
-CORS(app)
+
 
 face_detector_onnx = "version-RFB-640.onnx"
 face_detector = ort.InferenceSession(face_detector_onnx)
