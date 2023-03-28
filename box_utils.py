@@ -1,6 +1,6 @@
 import numpy as np
-import cv2 as cv
 import onnxruntime as ort
+from PIL import Image
 
 
 face_detector_onnx = "version-RFB-640.onnx"
@@ -81,10 +81,12 @@ def predict(
 
 
 def faceDetector(orig_image, threshold=0.5):
-    image = cv.cvtColor(orig_image, cv.COLOR_BGR2RGB)
-    image = cv.resize(
-        image, (640, 480)
+    image = Image.fromarray(orig_image)
+    image = image.convert("RGB")
+    image = image.resize(
+        (640, 480)
     )  # change this to (320, 240) for version-RFB-320 model
+    image = np.array(image)
     image_mean = np.array([127, 127, 127])
     image = (image - image_mean) / 128
     image = np.transpose(image, [2, 0, 1])

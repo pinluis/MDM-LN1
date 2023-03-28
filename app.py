@@ -1,13 +1,12 @@
 import logging
 from flask import Flask, request, jsonify
-import cv2 as cv
 from flask.helpers import send_file
 import onnxruntime as ort
 import numpy as np
 from box_utils import faceDetector
 import base64
 import io
-from PIL import Image
+from PIL import Image, ImageDraw
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -39,10 +38,11 @@ def image_to_base64(image):
 def process_image(image):
     image_np = np.array(image)
     boxes, _, _ = faceDetector(image_np)
+    draw = ImageDraw.Draw(image)
     for box in boxes:
         x, y, w, h = box
-        cv.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    return Image.fromarray(image_np)
+        draw.rectangle([(x, y), (x + w, y + h)], outline=(255, 0, 0), width=2)
+    return image
 
 
 @app.route("/", methods=["GET"])

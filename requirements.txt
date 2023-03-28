@@ -379,14 +379,6 @@ onnxruntime==1.14.1 ; python_full_version == "3.9.16" \
     --hash=sha256:f4ac52ff4ac793683ebd1fbd1ee24197e3b4ca825ee68ff739296a820867debe \
     --hash=sha256:fa23df6a349218636290f9fe56d7baaceb1a50cf92255234d495198b47d92327 \
     --hash=sha256:fc65e9061349cdf98ce16b37722b557109f16076632fbfed9a3151895cfd3bb7
-opencv-python-headless==4.7.0.72 ; python_full_version == "3.9.16" \
-    --hash=sha256:18dac3147863d2f4beef6b06b784ee115799a7842e2883adc4ae750c432613f9 \
-    --hash=sha256:2f8b60bddd325411cf4664e4dbea729ce20f0c2ffeaedc5c6724b544fdf36e8a \
-    --hash=sha256:388015ee96816b71e529fed6153aeb68420b69a80efad7aad5445fd7cd7a154c \
-    --hash=sha256:6e13954f705e640e52962dfb252ee1f0a0af7b33cdbe8dd73f27e7e31172b7a2 \
-    --hash=sha256:eea59caa92b28b197f9d2a2dd8275ca3869718b2a857c8e53203de6ef3f9f4db \
-    --hash=sha256:f448aea686069474e701223a2ed192df95f501a092b5e06e39171b4927564692 \
-    --hash=sha256:f7f421a2099acbfb69db5e571abaf69a90f43846c3832452c19611efc2c6c926
 packaging==23.0 ; python_full_version == "3.9.16" \
     --hash=sha256:714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2 \
     --hash=sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97
