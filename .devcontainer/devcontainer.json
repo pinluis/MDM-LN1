@@ -1,7 +1,7 @@
 {
   "name": "Python Devcontainer",
   "image": "mcr.microsoft.com/devcontainers/python:0-3.9",
-  "postCreateCommand": ".devcontainer/post-install.sh",
+  // "postCreateCommand": ".devcontainer/post-install.sh",
   "customizations": {
     "vscode": {
       "extensions": [
