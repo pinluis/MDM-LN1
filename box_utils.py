@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+import cv2 as cv
 import onnxruntime as ort
 
 
@@ -81,8 +81,8 @@ def predict(
 
 
 def faceDetector(orig_image, threshold=0.5):
-    image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
-    image = cv2.resize(
+    image = cv.cvtColor(orig_image, cv.COLOR_BGR2RGB)
+    image = cv.resize(
         image, (640, 480)
     )  # change this to (320, 240) for version-RFB-320 model
     image_mean = np.array([127, 127, 127])

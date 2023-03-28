@@ -1,6 +1,6 @@
 import logging
 from flask import Flask, request, jsonify
-import cv2
+import cv2 as cv
 from flask.helpers import send_file
 import onnxruntime as ort
 import numpy as np
@@ -41,7 +41,7 @@ def process_image(image):
     boxes, _, _ = faceDetector(image_np)
     for box in boxes:
         x, y, w, h = box
-        cv2.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        cv.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 2)
     return Image.fromarray(image_np)
 
 
