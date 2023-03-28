@@ -73,3 +73,7 @@ def detect_faces():
     output_image_data = image_to_base64(detected_image)
 
     return jsonify({"image": output_image_data})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
