@@ -40,8 +40,9 @@ def process_image(image):
     boxes, _, _ = faceDetector(image_np)
     draw = ImageDraw.Draw(image)
     for box in boxes:
-        x, y, w, h = box
-        draw.rectangle([(x, y), (x + w, y + h)], outline=(255, 0, 0), width=2)
+        x1, y1, x2, y2 = box
+        draw.rectangle([(x1, y1), (x2, y2)], outline=(255, 0, 0), width=2)
+
     return image
 
 

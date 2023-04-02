@@ -68,10 +68,9 @@ def predict(
     if not picked_box_probs:
         return None, None, None
     picked_box_probs = np.concatenate(picked_box_probs)
-    picked_box_probs[:, 0] *= width
-    picked_box_probs[:, 1] *= height
-    picked_box_probs[:, 2] *= width
-    picked_box_probs[:, 3] *= height
+    picked_box_probs[:, 0::2] *= width
+    picked_box_probs[:, 1::2] *= height
+
     print(picked_box_probs)  # add this line to print the picked boxes
     return (
         picked_box_probs[:, :4].astype(np.int32),
