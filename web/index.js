@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     startCameraBtn.addEventListener("click", async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
             video.srcObject = stream;
             video.play();
         } catch (err) {
@@ -49,5 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function displayOutputImage(imageSrc) {
         outputImage.src = imageSrc;
+        outputImage.style.display = 'block';
     }
 });
