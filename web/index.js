@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     startCameraBtn.addEventListener("click", async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
             video.play();
         } catch (err) {
@@ -15,12 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    captureBtn.addEventListener("click", () => {
+
+    captureBtn.addEventListener("click", async () => {
         try {
-            const context = canvas.getContext("2d");
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0);
+
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
+            const context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
             const imageData = canvas.toDataURL("image/jpeg");
             sendImageToBackend(imageData);
         } catch (err) {
@@ -29,26 +33,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     async function sendImageToBackend(imageDataUrl) {
-        const img_base64 = imageDataUrl.split(",")[1]; // Extract the base64 data without the prefix
-        const response = await fetch('/detect_faces', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ image: img_base64 }),
-        });
+      const img_base64 = imageDataUrl.split(",")[1];
+      const response = await fetch("/detect_faces", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ image: img_base64 }),
+      });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-        const result = await response.json();
-        const imageData = result.image;
-        displayOutputImage('data:image/jpeg;base64,' + imageData);
+      const result = await response.json();
+      const imageData = result.image;
+      displayOutputImage("data:image/jpeg;base64," + imageData);
     }
 
     function displayOutputImage(imageSrc) {
         outputImage.src = imageSrc;
-        outputImage.style.display = 'block';
+        outputImage.style.display = "block";
     }
-});
+
+  });
